@@ -16,11 +16,13 @@ import { Input } from "@/components/ui/input"
 import CustomInput from './CustomInput'
 import { authFormSchema } from '@/lib/utils'
 import { Loader2 } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { getLoggedInUser, signIn, signUp } from '@/lib/actions/user.actions'
 
 const AuthForm = ({type} : {type: string}) => {
+    const router = useRouter()
     const [user, setUser] = useState(null)
     const [isLoading, setIsLoading] = useState(false)
-
     const formSchema = authFormSchema(type)
 
 
@@ -32,10 +34,36 @@ const AuthForm = ({type} : {type: string}) => {
         },
     })
 
-    function onSubmit(values: z.infer<typeof formSchema>) {
+    const onSubmit = async(data: z.infer<typeof formSchema>) => {
         // Do something with the form values.
         // ✅ This will be type-safe and validated.
-        console.log(values)
+        setIsLoading(true)  
+        try {
+            // Sign up with appwrite & create plaid link token
+            if(type === 'sign-up'){
+                const newUser = await signUp(data)
+                setUser(newUser)
+
+
+
+            }
+
+            if (type === "sign-in") {
+                const response = await signIn({
+                    email: data.email,
+                    password: data.password,
+                })
+
+                if (response) router.push('/')
+            }
+
+            
+        } catch (error) {
+            console.log(error)
+            
+        }finally{
+            setIsLoading(false)
+        }
     }
       
 
@@ -102,6 +130,7 @@ const AuthForm = ({type} : {type: string}) => {
 
                             </div>
                             <CustomInput control={form.control} name='address1' label='Address' placeholder='Enter your address'/>
+                            <CustomInput control={form.control} name='city' label='City' placeholder='Enter your city'/>
 
 
 

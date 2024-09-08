@@ -8,6 +8,7 @@ import Logo from '@/public/icons/logo.svg'
 import { cn } from '@/lib/utils'
 import { usePathname } from 'next/navigation'
 import path from 'path'
+import Footer from './Footer'
 
 
 const Sidebar = ({user}: SiderbarProps ) => {
@@ -56,7 +57,7 @@ const Sidebar = ({user}: SiderbarProps ) => {
         USER
 
       </nav>
-      FOOTER
+      <Footer user={user} type='desktop'/>
 
     </section>
   )
