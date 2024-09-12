@@ -77,7 +77,6 @@ export const signUp = async ({ password, ...userData }: SignUpParams) => {
     if(!dwollaCustomerUrl) throw new Error('Error creating Dwolla customer')
 
     const dwollaCustomerId = extractCustomerIdFromUrl(dwollaCustomerUrl);
-    console.log(userData)
     const newUser = await database.createDocument(
       DATABASE_ID!,
       USER_COLLECTION_ID!,
